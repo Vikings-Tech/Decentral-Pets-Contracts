@@ -12,6 +12,10 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase{
     
     Counters.Counter private _tokenId;
     
+    struct Sales{
+        uint256 price;
+    }
+    
     //sales contract
     address private saleContractAddress;
     
@@ -21,6 +25,16 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase{
     
     //sales
     mapping(bytes32=>address) requestToUser;
+    mapping(uint256=>Sales) tokenToPrice;
+    mapping(address=>uint256) userToBalance;
+    //minting
+    mapping(uint256 =>uint256) tokenToDNA;
+    
+    
+    //events
+    event PetSale(address indexed userAddress,uint256 indexed tokenId,uint256 indexed DNA);
+    event SellOnMarket(address indexed userAddress,uint256 indexed tokenId,uint256 indexed price);
+    event BuyOnMarket(address indexed previousOwner,address indexed newOwner,uint256 indexed tokenId);
     
     constructor() ERC721("Decentra Pets","DPTS") VRFConsumerBase(0x8C7382F9D8f56b33781fE506E897a4F1e2d17255,
     0x326C977E6efc84E512bB9C30f76E30c160eD06FB) {
@@ -41,14 +55,28 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase{
     
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
         _tokenId.increment();
-        uint256 randomResult = randomness;
-        //Define pet genes
+        address senderAddress = requestToUser[requestId];
+        uint256 currentTokenId = _tokenId.current();
+        _safeMint(senderAddress,currentTokenId);
+        tokenToDNA[currentTokenId] = randomness % 10**20;
+        emit PetSale(senderAddress,currentTokenId,tokenToDNA[currentTokenId]);
     }
     
-    function buyFromMarket(uint256 tokenId) external payable {
-        //resale 
+    function buyFromMarket(uint256 tokenId,address toAddress) external payable {
+        require(tokenToPrice[tokenId].price > 0,"Contract : Token is not on sale");
+        require(msg.value >= tokenToPrice[tokenId].price,"Contract : Paid amount is less than price");
+        require(ownerOf(tokenId) != toAddress,"Contract : Receiver address is the owner");
+        address currentOwner = ownerOf(tokenId);
+        userToBalance[currentOwner] += msg.value;
+        safeTransferFrom(currentOwner,toAddress,tokenId);
+        emit BuyOnMarket(currentOwner,ownerOf(tokenId),tokenId);
     }
     
+    function sellOnMarket(uint256 tokenId,uint256 price) external{
+        approve(saleContractAddress,tokenId);
+        tokenToPrice[tokenId].price = price;
+        emit SellOnMarket(msg.sender,tokenId,price);
+    }
 }
 
 contract DPetsSales is Ownable{
@@ -60,6 +88,6 @@ contract DPetsSales is Ownable{
     
     function purchaseFromMarket(uint256 tokenId) external payable{
         DecentraPets Dpets = DecentraPets(DPetsAddress);
-        Dpets.buyFromMarket{value:msg.value}(tokenId);
+        Dpets.buyFromMarket{value:msg.value}(tokenId,msg.sender);
     }
 }

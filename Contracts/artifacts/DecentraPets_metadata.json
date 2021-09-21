@@ -74,9 +74,84 @@
 						"internalType": "address",
 						"name": "newOwner",
 						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "BuyOnMarket",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
 					}
 				],
 				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "DNA",
+						"type": "uint256"
+					}
+				],
+				"name": "PetSale",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "SellOnMarket",
 				"type": "event"
 			},
 			{
@@ -147,6 +222,11 @@
 						"internalType": "uint256",
 						"name": "tokenId",
 						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "toAddress",
+						"type": "address"
 					}
 				],
 				"name": "buyFromMarket",
@@ -327,6 +407,24 @@
 					}
 				],
 				"name": "safeTransferFrom",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "sellOnMarket",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -527,11 +625,11 @@
 	},
 	"sources": {
 		"Contracts/DPets.sol": {
-			"keccak256": "0x4e388152ac940d15a81a5dcf7bfd958c8378141ac7b003ac13bed23747d48ded",
+			"keccak256": "0x3c2ac01f1cf05dc6ebc0026773bc322f8b00a7b845ce55698cdb6f8597a82627",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dede970d2d1090b6153c85716dafd9cf9c911a39094b400b9a460239ba2dfec2",
-				"dweb:/ipfs/QmNxm12Yv528JQ3eeomfrSCT4pqqWSfPosyaccqByv77Jf"
+				"bzz-raw://25f9b3d92bfbedb7ccbed88577bb27c6100fd3179b69872267bbba81bc24cec1",
+				"dweb:/ipfs/Qmb96M4WCXNe7EzoMGBaQHyC79s2xX3LM7egKKYFNveuNe"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol": {
