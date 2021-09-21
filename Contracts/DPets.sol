@@ -74,6 +74,11 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase,ReentrancyGuar
         emit PetSale(senderAddress,currentTokenId,tokenToDNA[currentTokenId]);
     }
     
+    function getPetDNA(uint256 tokenId) external view returns(uint256){
+        require(_exists(tokenId),"Contract: Token does not exist");
+        return tokenToDNA[tokenId];
+    }
+    
     function buyFromMarket(uint256 tokenId,address toAddress) external payable {
         require(tokenToPrice[tokenId].price > 0,"Contract : Token is not on sale");
         require(msg.value >= tokenToPrice[tokenId].price,"Contract : Paid amount is less than price");
@@ -81,6 +86,7 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase,ReentrancyGuar
         address currentOwner = ownerOf(tokenId);
         userToBalance[currentOwner] += msg.value;
         safeTransferFrom(currentOwner,toAddress,tokenId);
+
         emit BuyOnMarket(currentOwner,ownerOf(tokenId),tokenId);
     }
     
@@ -94,6 +100,17 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase,ReentrancyGuar
         require(userToBalance[msg.sender] > 0,"User balance needs to be greater than 0");
         payable(msg.sender).transfer(userToBalance[msg.sender]);
         delete userToBalance[msg.sender];
+    }
+    
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override {
+        super._beforeTokenTransfer(from, to, tokenId);
+        if(tokenToPrice[tokenId].price != 0){
+            delete tokenToPrice[tokenId];
+        }
     }
 }
 

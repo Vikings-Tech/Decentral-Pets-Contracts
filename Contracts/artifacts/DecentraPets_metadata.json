@@ -269,6 +269,25 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "getPetDNA",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "owner",
 						"type": "address"
@@ -645,11 +664,11 @@
 	},
 	"sources": {
 		"Contracts/DPets.sol": {
-			"keccak256": "0x2ed1780624c33b0f39d0bc239f4cfbe9ba3d83f0c52cd56a1233f27e86b128eb",
+			"keccak256": "0x211b1cab2f40cda46ce7b0ec3bcbe708d5a8c729472271b50fdcd27443fd9005",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a64a9cfe382a93083656f54987fdf2118abddc4d0f6b9b82bce78531ba648bcf",
-				"dweb:/ipfs/QmUdsx7jaD5sFFtjCKFx9DaESBik9jwZh85j3xuSHEk4uM"
+				"bzz-raw://0bc1ff29c3d2eee87df0a6536ee44bfe22deb17d64d1dda6b296dbef5b125f23",
+				"dweb:/ipfs/QmWC1ZB3ZUPsgdg5TT7xEhGPwU2emkdpA1nksYEqD9ySAU"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol": {
