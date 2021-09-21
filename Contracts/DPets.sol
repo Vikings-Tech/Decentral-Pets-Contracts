@@ -5,8 +5,9 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 import "https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/VRFConsumerBase.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/ReentrancyGuard.sol";
 
-contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase{
+contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase,ReentrancyGuard{
     
     using Counters for Counters.Counter;
     
@@ -15,6 +16,9 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase{
     struct Sales{
         uint256 price;
     }
+    
+    //contract account
+    address private contractAccountAddress;
     
     //sales contract
     address private saleContractAddress;
@@ -40,16 +44,23 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase{
     0x326C977E6efc84E512bB9C30f76E30c160eD06FB) {
         keyHash = 0x6e75b569a01ef56d18cab6a8e71e6600d6ce853834d4a5748b720d06f878b3a4;
         fee = 0.0001 * 10 ** 18; 
+        contractAccountAddress = msg.sender;
     } 
     
     function setSalesContract(address salesAddress) external onlyOwner {
         saleContractAddress=salesAddress;
     }
     
+    function setContractAccount(address newAddress) external onlyOwner {
+        contractAccountAddress = newAddress;
+    }
+    
     function buyNewPet() external payable returns(bytes32){
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill contract with faucet");
+        require(msg.value >= 5 ether,"Contract : Need to pay at least 5 Ether");
         bytes32 requestId = requestRandomness(keyHash,fee);
         requestToUser[requestId] = msg.sender;
+        userToBalance[contractAccountAddress] += msg.value;
         return requestId;
     } 
     
@@ -59,6 +70,7 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase{
         uint256 currentTokenId = _tokenId.current();
         _safeMint(senderAddress,currentTokenId);
         tokenToDNA[currentTokenId] = randomness % 10**20;
+        delete requestToUser[requestId];
         emit PetSale(senderAddress,currentTokenId,tokenToDNA[currentTokenId]);
     }
     
@@ -76,6 +88,12 @@ contract DecentraPets is ERC721URIStorage,Ownable,VRFConsumerBase{
         approve(saleContractAddress,tokenId);
         tokenToPrice[tokenId].price = price;
         emit SellOnMarket(msg.sender,tokenId,price);
+    }
+    
+    function retrieveBalance() external nonReentrant {
+        require(userToBalance[msg.sender] > 0,"User balance needs to be greater than 0");
+        payable(msg.sender).transfer(userToBalance[msg.sender]);
+        delete userToBalance[msg.sender];
     }
 }
 

@@ -361,6 +361,13 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "retrieveBalance",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -443,6 +450,19 @@
 					}
 				],
 				"name": "setApprovalForAll",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newAddress",
+						"type": "address"
+					}
+				],
+				"name": "setContractAccount",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -625,11 +645,11 @@
 	},
 	"sources": {
 		"Contracts/DPets.sol": {
-			"keccak256": "0x3c2ac01f1cf05dc6ebc0026773bc322f8b00a7b845ce55698cdb6f8597a82627",
+			"keccak256": "0x2ed1780624c33b0f39d0bc239f4cfbe9ba3d83f0c52cd56a1233f27e86b128eb",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://25f9b3d92bfbedb7ccbed88577bb27c6100fd3179b69872267bbba81bc24cec1",
-				"dweb:/ipfs/Qmb96M4WCXNe7EzoMGBaQHyC79s2xX3LM7egKKYFNveuNe"
+				"bzz-raw://a64a9cfe382a93083656f54987fdf2118abddc4d0f6b9b82bce78531ba648bcf",
+				"dweb:/ipfs/QmUdsx7jaD5sFFtjCKFx9DaESBik9jwZh85j3xuSHEk4uM"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol": {
@@ -638,6 +658,14 @@
 			"urls": [
 				"bzz-raw://77d0f0721942b0dc9d2f5c57b97c814bb7b18e06614a872cbaf68feab2174bb8",
 				"dweb:/ipfs/QmacDiUVK818R4iXkEAUfehwaYFvptqLAELkcf9aJXZjyy"
+			]
+		},
+		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/ReentrancyGuard.sol": {
+			"keccak256": "0x3ad0ec379a808f08bbb0b2eaa4533add9a458cc411115030842034d8c2032c2b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4a6ad8b70f72c7f95535ac08452129a4ccc9dd523a49d7b613938af95327debf",
+				"dweb:/ipfs/Qmc2HdxeQoi9CA1TTuB4sCAEr1Bbrj38ZLBrE8moHNbyA5"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol": {
